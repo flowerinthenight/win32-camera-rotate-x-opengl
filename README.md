@@ -8,5 +8,5 @@ can be rotated along the x-axis using the up/down arrow keys.
 
 To run the app, you need to copy glew32.dll to the output directory.  
 
-Sample output:
+# Sample output:
 ![Ouput Screenshot](https://github.com/idrilsilverfoot/win32-camera-rotate-x-opengl/blob/master/output-scr.png)
