@@ -4,7 +4,7 @@ can be rotated along the x-axis using the up/down arrow keys.
 
 # Required libraries:
 * GLEW (http://glew.sourceforge.net/)
-* GLM (http://glm.g-truc.net/0.9.7/index.html)
+* GLM (http://glm.g-truc.net/)
 
 To run the app, you need to copy glew32.dll to the output directory.  
 
