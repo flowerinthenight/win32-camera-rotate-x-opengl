@@ -1,1 +1,1 @@
-# win32-camera-rotate-x-axis-opengl
+# win32-camera-rotate-x-opengl
