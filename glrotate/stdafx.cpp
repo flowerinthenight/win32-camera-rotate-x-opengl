@@ -1,5 +1,5 @@
 // stdafx.cpp : source file that includes just the standard includes
-// win32-camera-rotate-x-opengl.pch will be the pre-compiled header
+// glrotate.pch will be the pre-compiled header
 // stdafx.obj will contain the pre-compiled type information
 
 #include "stdafx.h"

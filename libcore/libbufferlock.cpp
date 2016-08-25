@@ -21,8 +21,8 @@
 #include "stdafx.h"
 #include <Windows.h>
 #include <comdef.h>
-#include "libcore.h"
-#include "libcamera.h"
+#include "..\include\libcore.h"
+#include "..\include\libcamera.h"
 #include <strsafe.h>
 
 class VideoBufferLock : public IBufferLock {

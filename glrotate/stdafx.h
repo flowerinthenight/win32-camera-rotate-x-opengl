@@ -22,4 +22,3 @@
 #define FN	__FUNCTION__
 
 #define WM_CAMERA_BUFFER_READY	WM_APP + 1
-

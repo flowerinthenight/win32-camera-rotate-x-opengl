@@ -12,5 +12,3 @@
 #include <windows.h>
 
 #define M L"LIBCORE"
-#define FL __FILE__
-#define FN __FUNCTION__
