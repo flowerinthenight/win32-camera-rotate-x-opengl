@@ -52,7 +52,8 @@ GLuint LoadShaders(const char *vertexFilePath, const char *fragmentFilePath)
     std::string vertexShaderCode;
     std::ifstream vertexShaderStream(vertexFilePath, std::ios::in);
 
-    if (vertexShaderStream.is_open()) {
+    if (vertexShaderStream.is_open())
+    {
         std::string line = "";
 
         while (getline(vertexShaderStream, line))
@@ -60,7 +61,8 @@ GLuint LoadShaders(const char *vertexFilePath, const char *fragmentFilePath)
 
         vertexShaderStream.close();
     }
-    else {
+    else
+    {
         EventWriteInfoW(MD, FL, FN, L"Cannot open vextex shader.");
         return 0;
     }
@@ -68,7 +70,8 @@ GLuint LoadShaders(const char *vertexFilePath, const char *fragmentFilePath)
     std::string fragmentShaderCode;
     std::ifstream fragmentShaderStream(fragmentFilePath, std::ios::in);
 
-    if (fragmentShaderStream.is_open()) {
+    if (fragmentShaderStream.is_open())
+    {
         std::string line = "";
 
         while (getline(fragmentShaderStream, line))
@@ -89,7 +92,8 @@ GLuint LoadShaders(const char *vertexFilePath, const char *fragmentFilePath)
     glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &result);
     glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-    if (infoLogLength > 0) {
+    if (infoLogLength > 0)
+    {
         std::vector<char> vertexShaderErrorMessage(infoLogLength + 1);
         glGetShaderInfoLog(vertexShaderID, infoLogLength, NULL, &vertexShaderErrorMessage[0]);
         EventWriteAnsiStrInfo(MD, FL, FN, L"Compile vertex shader result", &vertexShaderErrorMessage[0]);
@@ -104,7 +108,8 @@ GLuint LoadShaders(const char *vertexFilePath, const char *fragmentFilePath)
     glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
     glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-    if (infoLogLength > 0) {
+    if (infoLogLength > 0)
+    {
         std::vector<char> fragmentShaderErrorMessage(infoLogLength + 1);
         glGetShaderInfoLog(fragmentShaderID, infoLogLength, NULL, &fragmentShaderErrorMessage[0]);
         EventWriteAnsiStrInfo(MD, FL, FN, L"Compile fragment shader result", &fragmentShaderErrorMessage[0]);
@@ -122,7 +127,8 @@ GLuint LoadShaders(const char *vertexFilePath, const char *fragmentFilePath)
     glGetProgramiv(programId, GL_LINK_STATUS, &result);
     glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-    if (infoLogLength > 0) {
+    if (infoLogLength > 0)
+    {
         std::vector<char> programErrorMessage(infoLogLength + 1);
         glGetProgramInfoLog(programId, infoLogLength, NULL, &programErrorMessage[0]);
         EventWriteAnsiStrInfo(MD, FL, FN, L"Link shader result", &programErrorMessage[0]);
@@ -138,61 +144,59 @@ GLuint LoadShaders(const char *vertexFilePath, const char *fragmentFilePath)
 
 GLvoid ReleaseGLWindow(GLvoid)
 {
-    if (hRC) {
+    if (hRC)
+    {
         wglMakeCurrent(NULL, NULL);
         wglDeleteContext(hRC);
         hRC = NULL;
     }
 
-    if (hDC && !ReleaseDC(hWnd, hDC)) {
-        hDC = NULL;
-    }
-
-    if (hWnd && !DestroyWindow(hWnd)) {
-        hWnd = NULL;
-    }
-
-    if (!UnregisterClass(szWindowClass, hInst)) {
-        hInst = NULL;
-    }
+    if (hDC && !ReleaseDC(hWnd, hDC)) hDC = NULL;
+    if (hWnd && !DestroyWindow(hWnd)) hWnd = NULL;
+    if (!UnregisterClass(szWindowClass, hInst)) hInst = NULL;
 }
 
 BOOL InitializeGL()
 {
     GLuint pixelFormat;
 
-    static	PIXELFORMATDESCRIPTOR pfd = {
+    static PIXELFORMATDESCRIPTOR pfd = {
         sizeof(PIXELFORMATDESCRIPTOR), 1, PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER, PFD_TYPE_RGBA, 32,
         0,0,0,0,0,0,0,0,0,0,0,0,0,24,0,0,
         PFD_MAIN_PLANE,
         0,0,0,0
     };
 
-    if (!(hDC = GetDC(hWnd))) {
+    if (!(hDC = GetDC(hWnd)))
+    {
         EventWriteLastError(MD, FL, FN, L"GetDC", GetLastError());
         ReleaseGLWindow();
         return FALSE;
     }
 
-    if (!(pixelFormat = ChoosePixelFormat(hDC, &pfd))) {
+    if (!(pixelFormat = ChoosePixelFormat(hDC, &pfd)))
+    {
         EventWriteLastError(MD, FL, FN, L"ChoosePixelFormat", GetLastError());
         ReleaseGLWindow();
         return FALSE;
     }
 
-    if (!SetPixelFormat(hDC, pixelFormat, &pfd)) {
+    if (!SetPixelFormat(hDC, pixelFormat, &pfd))
+    {
         EventWriteLastError(MD, FL, FN, L"SetPixelFormat", GetLastError());
         ReleaseGLWindow();
         return FALSE;
     }
 
-    if (!(hRC = wglCreateContext(hDC))) {
+    if (!(hRC = wglCreateContext(hDC)))
+    {
         EventWriteLastError(MD, FL, FN, L"wglCreateContext", GetLastError());
         ReleaseGLWindow();
         return FALSE;
     }
 
-    if (!wglMakeCurrent(hDC, hRC)) {
+    if (!wglMakeCurrent(hDC, hRC))
+    {
         EventWriteLastError(MD, FL, FN, L"wglMakeCurrent", GetLastError());
         ReleaseGLWindow();
         return FALSE;
@@ -218,9 +222,7 @@ BOOL Initialize(HINSTANCE hInstance, int nCmdShow)
         hInstance,
         NULL);
 
-    if (!hWnd) {
-        return FALSE;
-    }
+    if (!hWnd) return FALSE;
 
     RECT rcClient;
     GetClientRect(hWnd, &rcClient);
@@ -251,7 +253,8 @@ BOOL Initialize(HINSTANCE hInstance, int nCmdShow)
     StringCchPrintf(szWinText, MAX_PATH, L"OpenGL-Win32 (OpenGL Version %s)", szVersion);
     SetWindowText(hWnd, szWinText);
 
-    if (glewInit() != GLEW_OK) {
+    if (glewInit() != GLEW_OK)
+    {
         EventWriteErrorW(MD, FL, FN, L"Failed to initialize GLEW");
     }
 
@@ -313,10 +316,12 @@ BOOL Initialize(HINSTANCE hInstance, int nCmdShow)
 
     attrib_position = glGetAttribLocation(shader_program, "position");
 
-    if (attrib_position == -1) {
+    if (attrib_position == -1)
+    {
         EventWriteInfoW(MD, FL, FN, L"Could not bind attrib_position.");
     }
-    else {
+    else
+    {
         glVertexAttribPointer(attrib_position, 3, GL_FLOAT, GL_FALSE, 0, 0);
         glEnableVertexAttribArray(attrib_position);
     }
@@ -328,81 +333,81 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-    case WM_PAINT:
-    {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
-        SwapBuffers(hdc);
-        EndPaint(hWnd, &ps);
-        break;
-    }
-
-    case WM_KEYDOWN:
-
-        if (wParam == VK_UP) {
-            EventWriteInfoW(MD, FL, FN, L"VK_UP.");
-
-            if (!bIncrement) bIncrement = TRUE;
-
-            if (bIncrement)
-                if (angle >= 360.0f)
-                    bIncrement = FALSE;
-
-            if (bIncrement)
-                angle += 1.0f;
+        case WM_PAINT:
+        {
+            PAINTSTRUCT ps;
+            HDC hdc = BeginPaint(hWnd, &ps);
+            SwapBuffers(hdc);
+            EndPaint(hWnd, &ps);
+            break;
         }
 
-        if (wParam == VK_DOWN) {
-            EventWriteInfoW(MD, FL, FN, L"VK_DOWN.");
+        case WM_KEYDOWN:
 
-            if (bIncrement) bIncrement = FALSE;
+            if (wParam == VK_UP) {
+                EventWriteInfoW(MD, FL, FN, L"VK_UP.");
 
-            if (!bIncrement)
-                if (angle <= 0.0f)
-                    bIncrement = TRUE;
+                if (!bIncrement) bIncrement = TRUE;
 
-            if (!bIncrement)
-                angle -= 1.0f;
+                if (bIncrement)
+                    if (angle >= 360.0f)
+                        bIncrement = FALSE;
+
+                if (bIncrement)
+                    angle += 1.0f;
+            }
+
+            if (wParam == VK_DOWN) {
+                EventWriteInfoW(MD, FL, FN, L"VK_DOWN.");
+
+                if (bIncrement) bIncrement = FALSE;
+
+                if (!bIncrement)
+                    if (angle <= 0.0f)
+                        bIncrement = TRUE;
+
+                if (!bIncrement)
+                    angle -= 1.0f;
+            }
+
+            break;
+
+        case WM_CAMERA_BUFFER_READY:
+        {
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            glUniform1f(uniform_angle, angle);
+
+            glTexImage2D(
+                GL_TEXTURE_2D,				// type of texture
+                0,							// pyramid level (for mip-mapping) - 0 is the top level
+                GL_RGB,						// internal colour format to convert to
+                WIDTH,						// image width  i.e. 640 for Kinect in standard mode
+                HEIGHT,						// image height i.e. 480 for Kinect in standard mode
+                0,							// border width in pixels (can either be 1 or 0)
+                GL_BGRA,						// input image format (i.e. GL_RGB, GL_RGBA, GL_BGR etc.)
+                GL_UNSIGNED_BYTE,			// image data type
+                pFrame);						// the actual image data itself
+
+            glUseProgram(shader_program);
+
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+            SwapBuffers(hDC);
+
+            break;
         }
 
-        break;
+        case WM_DESTROY:
+            PostQuitMessage(0);
+            break;
 
-    case WM_CAMERA_BUFFER_READY:
-    {
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        glUniform1f(uniform_angle, angle);
-
-        glTexImage2D(
-            GL_TEXTURE_2D,				// type of texture
-            0,							// pyramid level (for mip-mapping) - 0 is the top level
-            GL_RGB,						// internal colour format to convert to
-            WIDTH,						// image width  i.e. 640 for Kinect in standard mode
-            HEIGHT,						// image height i.e. 480 for Kinect in standard mode
-            0,							// border width in pixels (can either be 1 or 0)
-            GL_BGRA,						// input image format (i.e. GL_RGB, GL_RGBA, GL_BGR etc.)
-            GL_UNSIGNED_BYTE,			// image data type
-            pFrame);						// the actual image data itself
-
-        glUseProgram(shader_program);
-
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-        SwapBuffers(hDC);
-
-        break;
-    }
-
-    case WM_DESTROY:
-        PostQuitMessage(0);
-        break;
-
-    default: return DefWindowProc(hWnd, message, wParam, lParam);
+        default: return DefWindowProc(hWnd, message, wParam, lParam);
     }
 
     return 0;
@@ -432,15 +437,18 @@ HRESULT CALLBACK MfFrameCallback(HRESULT hrStatus, DWORD dwStreamIndex, DWORD dw
 {
     HRESULT hr = S_OK;
 
-    if (SUCCEEDED(hrStatus)) {
+    if (SUCCEEDED(hrStatus))
+    {
         DWORD dwBufferCount = 0;
 
-        if (pSample != NULL) {
+        if (pSample != NULL)
+        {
             hr = pSample->GetBufferCount(&dwBufferCount);
 
             // EventWriteNumberInfo(MD, FL, FN, L"Buffer count", dwBufferCount);
 
-            if (dwBufferCount == 1) {
+            if (dwBufferCount == 1)
+            {
                 IMFMediaBuffer *pMediaBuffer;
 
                 hr = pSample->ConvertToContiguousBuffer(&pMediaBuffer);
@@ -455,17 +463,17 @@ HRESULT CALLBACK MfFrameCallback(HRESULT hrStatus, DWORD dwStreamIndex, DWORD dw
 
                 hr = CreateBufferLockInstance(pMediaBuffer, &pBufferLock);
 
-                if (SUCCEEDED(hr) && pBufferLock) {
+                if (SUCCEEDED(hr) && pBufferLock)
+                {
                     BYTE *pData = NULL;
                     LONG lStride = 0;
 
                     hr = pBufferLock->LockBuffer(WIDTH * 2, HEIGHT, &pData, &lStride);
 
-                    if (SUCCEEDED(hr)) {
+                    if (SUCCEEDED(hr))
+                    {
                         FromYUY2ToRGB32(pFrame, pData, WIDTH, HEIGHT);
-
                         PostMessage(hWnd, WM_CAMERA_BUFFER_READY, 0, 0);
-
                         pBufferLock->UnlockBuffer();
                     }
 
@@ -491,9 +499,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     LoadStringW(hInstance, IDC_GLROTATE, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    if (!Initialize(hInstance, nCmdShow)) {
-        return FALSE;
-    }
+    if (!Initialize(hInstance, nCmdShow)) return FALSE;
 
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_GLROTATE));
 
@@ -503,13 +509,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
     hr = CreateCameraMfInstance(&pCamMf);
 
-    if (SUCCEEDED(hr) && pCamMf) {
+    if (SUCCEEDED(hr) && pCamMf)
+    {
         pCamMf->Initialize(640, 480, MfFrameCallback);
         pCamMf->StartRenderAsync(CAMERA_FRIENDLY_NAME);
     }
 
-    while (GetMessage(&m, nullptr, 0, 0)) {
-        if (!TranslateAccelerator(m.hwnd, hAccelTable, &m)) {
+    while (GetMessage(&m, nullptr, 0, 0))
+    {
+        if (!TranslateAccelerator(m.hwnd, hAccelTable, &m))
+        {
             TranslateMessage(&m);
             DispatchMessage(&m);
         }
@@ -523,7 +532,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
     glDeleteBuffers(1, &vbo);
     glDeleteVertexArrays(1, &vao);
 
-    if (SUCCEEDED(hr) && pCamMf) {
+    if (SUCCEEDED(hr) && pCamMf)
+    {
         pCamMf->StopRenderAsync();
         pCamMf->Release();
     }
